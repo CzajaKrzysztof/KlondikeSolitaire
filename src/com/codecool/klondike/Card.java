@@ -10,7 +10,7 @@ import java.util.*;
 public class Card extends ImageView {
 
     private Suits suit;
-    private Rank rank;
+    private Ranks rank;
     private boolean faceDown;
 
     private Image backFace;
@@ -23,7 +23,7 @@ public class Card extends ImageView {
     public static final int WIDTH = 150;
     public static final int HEIGHT = 215;
 
-    public Card(Suits suit, Rank rank, boolean faceDown) {
+    public Card(Suits suit, Ranks rank, boolean faceDown) {
         this.suit = suit;
         this.rank = rank;
         this.faceDown = faceDown;
@@ -38,7 +38,7 @@ public class Card extends ImageView {
         return suit;
     }
 
-    public int getRank() {
+    public Ranks getRank() {
         return rank;
     }
 
@@ -89,7 +89,7 @@ public class Card extends ImageView {
     public static List<Card> createNewDeck() {
         List<Card> result = new ArrayList<>();
         for (Suits suit: Suits.values()) {
-            for (Rank rank = 1; rank < 14; rank++) {
+            for (Ranks rank: Ranks.values()) {
                 result.add(new Card(suit, rank, true));
             }
         }
@@ -99,24 +99,11 @@ public class Card extends ImageView {
     public static void loadCardImages() {
         cardBackImage = new Image("card_images/card_back.png");
         String suitName = "";
-        for (Suits suit = 1; sui < 5; suit++) {
-            switch (Suits) {
-                case HEARTS:
-                    suitName = "hearts";
-                    break;
-                case DIAMONDS:
-                    suitName = "diamonds";
-                    break;
-                case SPADES:
-                    suitName = "spades";
-                    break;
-                case CLUBS:
-                    suitName = "clubs";
-                    break;
-            }
-            for (Rank rank = 1; rank < 14; rank++) {
-                String cardName = suitName + rank;
-                String cardId = "S" + suit + "R" + rank;
+        for (Suits suit: Suits.values()) {
+            String suitString = suit.toString().toLowerCase();
+            for (Ranks rank: Ranks.values()) {
+                String cardName = suitString + rank;
+                String cardId = "S" + suitString + "R" + rank;
                 String imageFileName = "card_images/" + cardName + ".png";
                 cardFaceImages.put(cardId, new Image(imageFileName));
             }

@@ -1,6 +1,6 @@
 package com.codecool.klondike;
 
-public enum Rank {
+public enum Ranks {
     TWO(2),
     THREE(3),
     FOUR(4),
@@ -17,7 +17,7 @@ public enum Rank {
 
     private int value;
 
-    Rank(int value) {
+    Ranks(int value) {
         this.value = value;
     }
 
