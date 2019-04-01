@@ -29,3 +29,4 @@ out/
 .vscode
 
 Test.java
+*.list*
