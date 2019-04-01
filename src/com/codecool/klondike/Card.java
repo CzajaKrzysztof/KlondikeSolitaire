@@ -100,10 +100,9 @@ public class Card extends ImageView {
         cardBackImage = new Image("card_images/card_back.png");
         String suitName = "";
         for (Suits suit: Suits.values()) {
-            String suitString = suit.toString().toLowerCase();
             for (Ranks rank: Ranks.values()) {
-                String cardName = suitString + rank;
-                String cardId = "S" + suitString + "R" + rank;
+                String cardName = suit.toString().toLowerCase() + rank.getValue();
+                String cardId = "S" + suit.getValue() + "R" + rank.getValue();
                 String imageFileName = "card_images/" + cardName + ".png";
                 cardFaceImages.put(cardId, new Image(imageFileName));
             }
