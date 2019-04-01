@@ -47,7 +47,7 @@ public class Card extends ImageView {
     }
 
     public String getShortName() {
-        return "S" + suit + "R" + rank;
+        return "S" + suit.getValue() + "R" + rank.getValue();
     }
 
     public DropShadow getDropShadow() {
