@@ -186,7 +186,12 @@ public class Game extends Pane {
         for (Pile pile: tableauPiles) {
             for (int i = 0; i < cardsAmount; i++) {
                 Card card = deckIterator.next();
+                addMouseEventHandlers(card);
+                getChildren().add(card);
                 pile.addCard(card);
+                if (i == cardsAmount - 1) {
+                    card.flip();
+                }
             }
             cardsAmount++;
         }
