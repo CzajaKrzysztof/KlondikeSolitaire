@@ -41,6 +41,10 @@ public class Game extends Pane {
             card.flip();
             card.setMouseTransparent(false);
             System.out.println("Placed " + card + " to the waste.");
+        } else if (card.getContainingPile().getPileType() == Pile.PileType.TABLEAU
+                && card.getContainingPile().getTopCard() == card && card.isFaceDown()){
+            card.flip();
+            card.setMouseTransparent(false);
         }
     };
 
@@ -78,7 +82,9 @@ public class Game extends Pane {
             return;
         Card card = (Card) e.getSource();
         Pile pile = getValidIntersectingPile(card, tableauPiles);
-        //TODO
+
+
+
         if (pile != null) {
             handleValidMove(card, pile);
         } else {
