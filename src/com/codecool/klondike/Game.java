@@ -72,34 +72,32 @@ public class Game extends Pane {
         for (int i = indexOfCard; i < activePile.getCards().size(); i++){
             Card c = activePile.getCards().get(i);
             if (!c.isFaceDown() && activePile.getPileType() == Pile.PileType.TABLEAU) {
-                draggedCards.add(c);
-
-                c.getDropShadow().setRadius(20);
-                c.getDropShadow().setOffsetX(10);
-                c.getDropShadow().setOffsetY(10);
-
-                c.toFront();
-                c.setTranslateX(offsetX);
-                c.setTranslateY(offsetY);
+                cardMovement(c, offsetX, offsetY);
             } else if (activePile.getPileType() == Pile.PileType.DISCARD) {
                 draggedCards.clear();
                 Card end = activePile.getTopCard();
-                draggedCards.add(end);
-
-                end.getDropShadow().setRadius(20);
-                end.getDropShadow().setOffsetX(10);
-                end.getDropShadow().setOffsetY(10);
-
-                end.toFront();
-                end.setTranslateX(offsetX);
-                end.setTranslateY(offsetY);
-
-
-
+                cardMovement(c, offsetX, offsetY);
+                
+            } else if (activePile.getPileType() == Pile.PileType.FOUNDATION){
+                draggedCards.clear();
+                Card end = activePile.getTopCard();
+                cardMovement(c, offsetX, offsetY);
             }
         }
 
     };
+
+    private void cardMovement(Card card, double offsetX, double offsetY){
+        draggedCards.add(card);
+
+        card.getDropShadow().setRadius(20);
+        card.getDropShadow().setOffsetX(10);
+        card.getDropShadow().setOffsetY(10);
+
+        card.toFront();
+        card.setTranslateX(offsetX);
+        card.setTranslateY(offsetY);
+    }
 
     private EventHandler<MouseEvent> onMouseReleasedHandler = e -> {
         if (draggedCards.isEmpty())
@@ -114,15 +112,29 @@ public class Game extends Pane {
 
         if (pile != null) {
             handleValidMove(card, pile);
+            if (isGameWon()){
+                System.out.println("DUUPA");
+            }
         } else {
             draggedCards.forEach(MouseUtil::slideBack);
             draggedCards.clear();
         }
     };
 
-    public boolean isGameWon() {
-        //TODO
-        return false;
+    public boolean isGameWon(){
+        for (Pile pile : tableauPiles){
+            if (!pile.getCards().isEmpty()){
+                return false;
+            }
+        }
+        
+        if (!stockPile.Cards().isEmpty()){
+            return false;
+        }
+        if (!discardPile.Cards().isEmpty()){
+            return false;
+        }
+        return true;
     }
 
     public Game() {
