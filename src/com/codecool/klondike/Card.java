@@ -84,6 +84,10 @@ public class Card extends ImageView {
         return true;
     }
 
+    public static boolean isLower(Card lower, Card higher) {
+        return (higher.getRank().getValue() == lower.getRank().getValue() + 1);
+    }
+
     public static boolean isSameSuit(Card card1, Card card2) {
         return card1.getSuit() == card2.getSuit();
     }
