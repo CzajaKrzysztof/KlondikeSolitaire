@@ -14,6 +14,7 @@ import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -211,6 +212,7 @@ public class Game extends Pane {
     }
 
     public void dealCards() {
+        Collections.shuffle(deck);
         Iterator<Card> deckIterator = deck.iterator();
         int cardsAmount = 1;
         for (Pile pile: tableauPiles) {
