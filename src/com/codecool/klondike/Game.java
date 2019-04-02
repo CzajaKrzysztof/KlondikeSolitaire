@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 public class Game extends Pane {
 
@@ -136,7 +137,14 @@ public class Game extends Pane {
     }
 
     public void refillStockFromDiscard() {
-        //TODO
+        Iterator<Card> discardIterator = discardPile.getCards().iterator();
+        Collections.reverse(discardPile.getCards());
+        while(discardIterator.hasNext()) {
+            Card card = discardIterator.next();
+            card.flip();
+            stockPile.addCard(card);;
+        }
+        discardPile.clear();
         System.out.println("Stock refilled from discard pile.");
     }
 
