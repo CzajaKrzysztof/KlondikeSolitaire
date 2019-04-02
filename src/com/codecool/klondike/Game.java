@@ -128,10 +128,10 @@ public class Game extends Pane {
             }
         }
         
-        if (!stockPile.Cards().isEmpty()){
+        if (!stockPile.getCards().isEmpty()){
             return false;
         }
-        if (!discardPile.Cards().isEmpty()){
+        if (!discardPile.getCards().isEmpty()){
             return false;
         }
         return true;
