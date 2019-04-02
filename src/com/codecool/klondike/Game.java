@@ -112,12 +112,12 @@ public class Game extends Pane {
 
         if (pile != null) {
             handleValidMove(card, pile);
-            if (isGameWon()){
-                System.out.println("DUUPA");
-            }
         } else {
             draggedCards.forEach(MouseUtil::slideBack);
             draggedCards.clear();
+        }
+        if (isGameWon()){
+            System.out.println("DUUPA");
         }
     };
 
