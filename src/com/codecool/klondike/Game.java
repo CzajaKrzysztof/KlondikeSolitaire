@@ -67,15 +67,35 @@ public class Game extends Pane {
         double offsetY = e.getSceneY() - dragStartY;
 
         draggedCards.clear();
-        draggedCards.add(card);
+        for (Card c : activePile.getCards()) {
+            if (!c.isFaceDown() && activePile.getPileType() == Pile.PileType.TABLEAU) {
+                draggedCards.add(c);
 
-        card.getDropShadow().setRadius(20);
-        card.getDropShadow().setOffsetX(10);
-        card.getDropShadow().setOffsetY(10);
+                c.getDropShadow().setRadius(20);
+                c.getDropShadow().setOffsetX(10);
+                c.getDropShadow().setOffsetY(10);
 
-        card.toFront();
-        card.setTranslateX(offsetX);
-        card.setTranslateY(offsetY);
+                c.toFront();
+                c.setTranslateX(offsetX);
+                c.setTranslateY(offsetY);
+            } else if (activePile.getPileType() == Pile.PileType.DISCARD) {
+                draggedCards.clear();
+                Card end = activePile.getTopCard();
+                draggedCards.add(end);
+
+                end.getDropShadow().setRadius(20);
+                end.getDropShadow().setOffsetX(10);
+                end.getDropShadow().setOffsetY(10);
+
+                end.toFront();
+                end.setTranslateX(offsetX);
+                end.setTranslateY(offsetY);
+
+
+
+            }
+        }
+
     };
 
     private EventHandler<MouseEvent> onMouseReleasedHandler = e -> {
