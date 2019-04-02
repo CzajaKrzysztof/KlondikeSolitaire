@@ -68,7 +68,9 @@ public class Game extends Pane {
         double offsetY = e.getSceneY() - dragStartY;
 
         draggedCards.clear();
-        for (Card c : activePile.getCards()) {
+        int indexOfCard = activePile.getCards().indexOf(card);
+        for (int i = indexOfCard; i < activePile.getCards().size(); i++){
+            Card c = activePile.getCards().get(i);
             if (!c.isFaceDown() && activePile.getPileType() == Pile.PileType.TABLEAU) {
                 draggedCards.add(c);
 
