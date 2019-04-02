@@ -122,19 +122,16 @@ public class Game extends Pane {
     };
 
     public boolean isGameWon(){
-        for (Pile pile : tableauPiles){
-            if (!pile.getCards().isEmpty()){
-                return false;
+        for (Pile pile : foundationPiles) {
+            if (pile.getCards().size() != 0) {
+                if (pile.getTopCard().getRank().getValue() != Ranks.KING.getValue()) {
+                    return false;
+                } else {
+                    return true;
+                }
             }
         }
-        
-        if (!stockPile.getCards().isEmpty()){
-            return false;
-        }
-        if (!discardPile.getCards().isEmpty()){
-            return false;
-        }
-        return true;
+        return false;
     }
 
     public Game() {
