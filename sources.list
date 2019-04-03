@@ -1,0 +1,7 @@
+src/com/codecool/klondike/Pile.java
+src/com/codecool/klondike/MouseUtil.java
+src/com/codecool/klondike/Card.java
+src/com/codecool/klondike/Suits.java
+src/com/codecool/klondike/Game.java
+src/com/codecool/klondike/Klondike.java
+src/com/codecool/klondike/Ranks.java
