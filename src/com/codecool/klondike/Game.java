@@ -126,23 +126,24 @@ public class Game extends Pane {
             draggedCards.forEach(MouseUtil::slideBack);
             draggedCards.clear();
         }
-
+        if (isGameWon()){
+            System.out.println("DUUPA");
+            gameWon(this.attachedStage);
+        }
     };
 
     public boolean isGameWon(){
-        for (Pile pile : foundationPiles){
-            if (!pile.getCards().isEmpty()){
-                return true;
+        int completedPiles = 0;
+        int pileOneToComplete = 0;
+        for (Pile pile : foundationPiles) {
+            if (pile.numOfCards() == 13) {
+                completedPiles++;
+            } else if (pile.numOfCards() == 12) {
+                pileOneToComplete++;
+
             }
         }
-        return false;
-        // if (!stockPile.getCards().isEmpty()){
-        //     return false;
-        // }
-        // if (!discardPile.getCards().isEmpty()){
-        //     return false;
-        // }
-        // return true;
+        return (completedPiles == 3 && pileOneToComplete ==1);
     }
 
     public Game(Stage primary) {
