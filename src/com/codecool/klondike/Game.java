@@ -122,18 +122,17 @@ public class Game extends Pane {
     };
 
     public boolean isGameWon(){
-        int numberOfKingsInFoundation = 0;
+        int completedPiles = 0;
+        int pileOneToComplete = 0;
         for (Pile pile : foundationPiles) {
-            if (pile.getCards().size() != 0) {
-                if (pile.getTopCard().getRank() == Ranks.KING) {
-                    numberOfKingsInFoundation++;
-                }
-                if (numberOfKingsInFoundation == 4) {
-                    return true;
-                }
+            if (pile.numOfCards() == 13) {
+                completedPiles++;
+            } else if (pile.numOfCards() == 12) {
+                pileOneToComplete++;
+
             }
         }
-        return false;
+        return (completedPiles == 3 && pileOneToComplete ==1);
     }
 
     public Game() {
