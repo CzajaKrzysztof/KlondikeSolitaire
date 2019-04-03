@@ -3,6 +3,7 @@ package com.codecool.klondike;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.event.EventHandler;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
@@ -12,6 +13,9 @@ import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.control.Button;
+import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,6 +26,9 @@ import java.util.ListIterator;
 public class Game extends Pane {
 
     private List<Card> deck = new ArrayList<>();
+    Stage attachedStage;
+    Stage win;
+    Button button;
 
     private Pile stockPile;
     private Pile discardPile;
@@ -112,12 +119,16 @@ public class Game extends Pane {
 
         if (pile != null) {
             handleValidMove(card, pile);
+            if (isGameWon()){
+                gameWon(this.attachedStage);
+            }
         } else {
             draggedCards.forEach(MouseUtil::slideBack);
             draggedCards.clear();
         }
         if (isGameWon()){
             System.out.println("DUUPA");
+            gameWon(this.attachedStage);
         }
     };
 
@@ -135,10 +146,11 @@ public class Game extends Pane {
         return (completedPiles == 3 && pileOneToComplete ==1);
     }
 
-    public Game() {
+    public Game(Stage primary) {
         deck = Card.createNewDeck();
         initPiles();
         dealCards();
+        this.attachedStage = primary;
     }
 
     public void addMouseEventHandlers(Card card) {
@@ -281,4 +293,16 @@ public class Game extends Pane {
                 BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
     }
 
+
+    void gameWon(Stage stage){
+        win = new Stage();
+        win.setTitle("congratulations");
+        button = new Button("Victory! Closing now...");
+        button.setOnAction(e -> {this.attachedStage.close(); win.close();});
+        StackPane layout = new StackPane();
+        layout.getChildren().add(button);
+        Scene scene = new Scene(layout, 300, 250);
+        win.setScene(scene);
+        win.show();
+    }
 }
