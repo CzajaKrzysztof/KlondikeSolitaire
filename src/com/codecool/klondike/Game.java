@@ -129,7 +129,7 @@ public class Game extends Pane {
         }
     };
 
-    public boolean isGameWon(){
+    private boolean isGameWon(){
         int completedPiles = 0;
         int pileOneToComplete = 0;
         for (Pile pile : foundationPiles) {
@@ -150,14 +150,14 @@ public class Game extends Pane {
         this.attachedStage = primary;
     }
 
-    public void addMouseEventHandlers(Card card) {
+    private void addMouseEventHandlers(Card card) {
         card.setOnMousePressed(onMousePressedHandler);
         card.setOnMouseDragged(onMouseDraggedHandler);
         card.setOnMouseReleased(onMouseReleasedHandler);
         card.setOnMouseClicked(onMouseClickedHandler);
     }
 
-    public void refillStockFromDiscard() {
+    private void refillStockFromDiscard() {
         Iterator<Card> discardIterator = discardPile.getCards().iterator();
         Collections.reverse(discardPile.getCards());
         while(discardIterator.hasNext()) {
@@ -169,31 +169,36 @@ public class Game extends Pane {
         System.out.println("Stock refilled from discard pile.");
     }
 
-    public boolean isMoveValid(Card card, Pile destPile) {
+    private boolean isMoveValid(Card card, Pile destPile) {
         Card topCardInPile = destPile.getTopCard();
 
         if (tableauPiles.contains(destPile)) {
-            if (card.getRank().getValue() == (Ranks.KING.getValue()) && destPile.numOfCards()==0) {
-                return true;
-            } else if ((card.getRank().getValue() != (Ranks.KING.getValue())) && destPile.numOfCards()==0) {
-                return false;
-
-            } else if (Card.isOppositeColor(card, topCardInPile) && Card.isLower(card, topCardInPile)) {
-                return true;
-            }
+            return isMoveValidInTableauPile(card, topCardInPile, destPile);
         }
         else if (foundationPiles.contains(destPile)) {
-            if (card.getRank().getValue() == (Ranks.ACE.getValue()) && destPile.numOfCards()==0) {
-                return true;
-            } else if ((card.getRank().getValue() != (Ranks.ACE.getValue())) && destPile.numOfCards()==0) {
-                return false;
-
-            } else if (Card.isSameSuit(card, topCardInPile) && Card.isLower(topCardInPile, card)) {
-                return true;
-            }
+            return isMoveValidInFoundationPile(card, topCardInPile, destPile);
         }
         return false;
     }
+
+    private boolean isMoveValidInTableauPile(Card card, Card topCardInPile, Pile destPile) {
+        if (card.getRank().getValue() == (Ranks.KING.getValue()) && destPile.numOfCards()==0) {
+            return true;
+        } else if ((card.getRank().getValue() != (Ranks.KING.getValue())) && destPile.numOfCards()==0) {
+            return false;
+        } 
+        return (Card.isOppositeColor(card, topCardInPile) && Card.isLower(card, topCardInPile));
+    }
+
+    private boolean isMoveValidInFoundationPile(Card card, Card topCardInPile, Pile destPile) {
+        if (card.getRank().getValue() == (Ranks.ACE.getValue()) && destPile.numOfCards()==0) {
+            return true;
+        } else if ((card.getRank().getValue() != (Ranks.ACE.getValue())) && destPile.numOfCards()==0) {
+            return false;
+        }
+        return (Card.isSameSuit(card, topCardInPile) && Card.isLower(topCardInPile, card));
+    }
+
     private Pile getValidIntersectingPile(Card card, List<Pile> piles) {
         Pile result = null;
         for (Pile pile : piles) {
@@ -229,21 +234,35 @@ public class Game extends Pane {
 
 
     private void initPiles() {
+        initStockPile();
+        initDiscardPile();
+        initFoundationPiles();
+        initTableauPiles();
+    }
+
+    private void initStockPile() {
         stockPile = new Pile(Pile.PileType.STOCK, "Stock", STOCK_GAP);
         setDefaultForPile(stockPile, 95, 20);
         stockPile.setOnMouseClicked(stockReverseCardsHandler);
         getChildren().add(stockPile);
+    }
 
+    private void initDiscardPile() {
         discardPile = new Pile(Pile.PileType.DISCARD, "Discard", STOCK_GAP);
         setDefaultForPile(discardPile, 285, 20);
         getChildren().add(discardPile);
+    }
 
+    private void initFoundationPiles() {
         for (int i = 0; i < 4; i++) {
             Pile foundationPile = new Pile(Pile.PileType.FOUNDATION, "Foundation " + i, FOUNDATION_GAP);
             setDefaultForPile(foundationPile, 610 + i * 180, 20);
             foundationPiles.add(foundationPile);
             getChildren().add(foundationPile);
         }
+    }
+
+    private void initTableauPiles() {
         for (int i = 0; i < 7; i++) {
             Pile tableauPile = new Pile(Pile.PileType.TABLEAU, "Tableau " + i, TABLEAU_GAP);
             setDefaultForPile(tableauPile, 95 + i * 180, 275);
@@ -252,15 +271,21 @@ public class Game extends Pane {
         }
     }
 
-    public void setDefaultForPile(Pile pile, int layoutX, int layoutY) {
+    private void setDefaultForPile(Pile pile, int layoutX, int layoutY) {
         pile.setBlurredBackground();
         pile.setLayoutX(layoutX);
         pile.setLayoutY(layoutY);
     }
 
-    public void dealCards() {
+    private void dealCards() {
         Collections.shuffle(deck);
         Iterator<Card> deckIterator = deck.iterator();
+        dealCardsToTableauPiles(deckIterator);
+        dealCardsToStockPile(deckIterator);
+
+    }
+
+    private void dealCardsToTableauPiles(Iterator<Card> deckIterator) {
         int cardsAmount = 1;
         for (Pile pile: tableauPiles) {
             for (int i = 0; i < cardsAmount; i++) {
@@ -274,15 +299,17 @@ public class Game extends Pane {
             }
             cardsAmount++;
         }
+    }
+
+    private void dealCardsToStockPile(Iterator<Card> deckIterator) {
         deckIterator.forEachRemaining(card -> {
             stockPile.addCard(card);
             addMouseEventHandlers(card);
             getChildren().add(card);
         });
-
     }
 
-    public void setTableBackground(Image tableBackground) {
+    void setTableBackground(Image tableBackground) {
         setBackground(new Background(new BackgroundImage(tableBackground,
                 BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT,
                 BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
