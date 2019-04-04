@@ -280,6 +280,12 @@ public class Game extends Pane {
     public void dealCards() {
         Collections.shuffle(deck);
         Iterator<Card> deckIterator = deck.iterator();
+        dealCardsToTableauPiles(deckIterator);
+        dealCardsToStockPile(deckIterator);
+
+    }
+
+    public void dealCardsToTableauPiles(Iterator<Card> deckIterator) {
         int cardsAmount = 1;
         for (Pile pile: tableauPiles) {
             for (int i = 0; i < cardsAmount; i++) {
@@ -293,12 +299,14 @@ public class Game extends Pane {
             }
             cardsAmount++;
         }
+    }
+
+    public void dealCardsToStockPile(Iterator<Card> deckIterator) {
         deckIterator.forEachRemaining(card -> {
             stockPile.addCard(card);
             addMouseEventHandlers(card);
             getChildren().add(card);
         });
-
     }
 
     public void setTableBackground(Image tableBackground) {
