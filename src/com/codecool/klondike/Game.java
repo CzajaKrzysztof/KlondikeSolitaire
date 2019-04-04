@@ -229,21 +229,35 @@ public class Game extends Pane {
 
 
     private void initPiles() {
+        initSockPile();
+        initDiscardPile();
+        initFoundationPiles();
+        initTableauPiles();
+    }
+
+    public void initSockPile() {
         stockPile = new Pile(Pile.PileType.STOCK, "Stock", STOCK_GAP);
         setDefaultForPile(stockPile, 95, 20);
         stockPile.setOnMouseClicked(stockReverseCardsHandler);
         getChildren().add(stockPile);
+    }
 
+    public void initDiscardPile() {
         discardPile = new Pile(Pile.PileType.DISCARD, "Discard", STOCK_GAP);
         setDefaultForPile(discardPile, 285, 20);
         getChildren().add(discardPile);
+    }
 
+    public void initFoundationPiles() {
         for (int i = 0; i < 4; i++) {
             Pile foundationPile = new Pile(Pile.PileType.FOUNDATION, "Foundation " + i, FOUNDATION_GAP);
             setDefaultForPile(foundationPile, 610 + i * 180, 20);
             foundationPiles.add(foundationPile);
             getChildren().add(foundationPile);
         }
+    }
+
+    public void initTableauPiles() {
         for (int i = 0; i < 7; i++) {
             Pile tableauPile = new Pile(Pile.PileType.TABLEAU, "Tableau " + i, TABLEAU_GAP);
             setDefaultForPile(tableauPile, 95 + i * 180, 275);
