@@ -119,9 +119,6 @@ public class Game extends Pane {
 
         if (pile != null) {
             handleValidMove(card, pile);
-            if (isGameWon()){
-                gameWon(this.attachedStage);
-            }
         } else {
             draggedCards.forEach(MouseUtil::slideBack);
             draggedCards.clear();
@@ -264,7 +261,7 @@ public class Game extends Pane {
     }
 
     public void dealCards() {
-        Collections.shuffle(deck);
+        // Collections.shuffle(deck);
         Iterator<Card> deckIterator = deck.iterator();
         int cardsAmount = 1;
         for (Pile pile: tableauPiles) {
