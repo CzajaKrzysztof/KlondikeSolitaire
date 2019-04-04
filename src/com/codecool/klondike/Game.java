@@ -173,27 +173,32 @@ public class Game extends Pane {
         Card topCardInPile = destPile.getTopCard();
 
         if (tableauPiles.contains(destPile)) {
-            if (card.getRank().getValue() == (Ranks.KING.getValue()) && destPile.numOfCards()==0) {
-                return true;
-            } else if ((card.getRank().getValue() != (Ranks.KING.getValue())) && destPile.numOfCards()==0) {
-                return false;
-
-            } else if (Card.isOppositeColor(card, topCardInPile) && Card.isLower(card, topCardInPile)) {
-                return true;
-            }
+            return isMoveValidInTableauPile(card, topCardInPile, destPile);
         }
         else if (foundationPiles.contains(destPile)) {
-            if (card.getRank().getValue() == (Ranks.ACE.getValue()) && destPile.numOfCards()==0) {
-                return true;
-            } else if ((card.getRank().getValue() != (Ranks.ACE.getValue())) && destPile.numOfCards()==0) {
-                return false;
-
-            } else if (Card.isSameSuit(card, topCardInPile) && Card.isLower(topCardInPile, card)) {
-                return true;
-            }
+            return isMoveValidInFoundationPile(card, topCardInPile, destPile);
         }
         return false;
     }
+
+    public boolean isMoveValidInTableauPile(Card card, Card topCardInPile, Pile destPile) {
+        if (card.getRank().getValue() == (Ranks.KING.getValue()) && destPile.numOfCards()==0) {
+            return true;
+        } else if ((card.getRank().getValue() != (Ranks.KING.getValue())) && destPile.numOfCards()==0) {
+            return false;
+        } 
+        return (Card.isOppositeColor(card, topCardInPile) && Card.isLower(card, topCardInPile));
+    }
+
+    public boolean isMoveValidInFoundationPile(Card card, Card topCardInPile, Pile destPile) {
+        if (card.getRank().getValue() == (Ranks.ACE.getValue()) && destPile.numOfCards()==0) {
+            return true;
+        } else if ((card.getRank().getValue() != (Ranks.ACE.getValue())) && destPile.numOfCards()==0) {
+            return false;
+        }
+        return (Card.isSameSuit(card, topCardInPile) && Card.isLower(topCardInPile, card));
+    }
+
     private Pile getValidIntersectingPile(Card card, List<Pile> piles) {
         Pile result = null;
         for (Pile pile : piles) {
